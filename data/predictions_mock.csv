@@ -1,7 +1,13 @@
-date,district,predicted_cases
-2026-06-01,Colombo,15
-2026-06-01,Kandy,8
-2026-06-01,Galle,12
-2026-06-02,Colombo,14
-2026-06-02,Kandy,9
-2026-06-02,Galle,11
+date,MOH_Division,latitude,longitude,Predicted_Risk_Score,Recommended_Sterile_Release,Garbage_Spots
+2026-06-08,Galle Road (Colombo 04),6.8966,79.8553,85,50000,12
+2026-06-08,Wellawatte (Colombo 06),6.8790,79.8610,72,35000,8
+2026-06-08,Maradana Road (Colombo 10),6.9245,79.8654,92,65000,18
+2026-06-08,Cinnamon Gardens (Colombo 07),6.9012,79.8631,45,12000,3
+2026-06-08,Negombo Road (Gampaha District),7.2081,79.8426,88,55000,14
+2026-06-08,Kadawatha Central (Gampaha District),7.0022,79.9515,64,30000,7
+2026-06-08,Nittambuwa Town (Gampaha District),7.1441,80.1119,42,10000,2
+2026-06-08,Galle Road (Kalutara District),6.5854,79.9607,78,40000,11
+2026-06-08,Panadura Beach Road (Kalutara District),6.7105,79.9074,81,48000,13
+2026-06-08,Horana Town (Kalutara District),6.7126,80.0624,53,22000,5
+
+
