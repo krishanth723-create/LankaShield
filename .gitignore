@@ -1,0 +1,36 @@
+
+# === Python Environment & Cache ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+
+# === Streamlit Temporary Files ===
+.streamlit/config.toml
+.streamlit/runtime/
+.streamlit/secret.toml
+
+# === Data Security (Crucial for Privacy) ===
+# Blocks all real-world data files
+dashboard/data/*.csv
+dashboard/data/*.json
+dashboard/data/*.geojson
+backend/data/
+*.db
+*.sqlite3
+
+# Allow only the mock predictions file
+!dashboard/data/predictions_mock.csv
+
+# === OS Temporary Files ===
+.DS_Store
+Thumbs.db
+
+# === IDE Configurations ===
+.vscode/
+.idea/

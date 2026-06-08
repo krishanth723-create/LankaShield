@@ -16,8 +16,10 @@ from pathlib import Path
 
 # Project root directory configuration
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Hardcoded local path lookup to bypass strict .env overrides completely
 PREDICTIONS_PATH = str(BASE_DIR / 'data' / 'predictions_mock.csv')
+
+# Configure clean widescreen framework parameters
+st.set_page_config(layout="wide", page_title="LankaShield Dashboard")
 
 st.title('🦟 LankaShield – Dengue Hotspot Prediction')
 
@@ -26,7 +28,7 @@ st.sidebar.header('Filters')
 risk_threshold = st.sidebar.slider('Risk Score Threshold', min_value=0, max_value=100, value=50, step=5)
 selected_date = st.sidebar.date_input('Prediction Date', value=pd.to_datetime('2026-06-08'))
 
-# Simplified Data Loader Engine
+# Data Loader Engine
 @st.cache_data
 def load_predictions(file_path):
     if not os.path.exists(file_path):
@@ -45,10 +47,10 @@ pred_df = load_predictions(PREDICTIONS_PATH)
 
 # Apply selected filters dynamically
 filtered = pred_df[pred_df['date'] == pd.to_datetime(selected_date)]
-m = folium.Map(location=[6.9000, 80.0000], zoom_start=9, tiles='CartoDB positron')
+filtered = filtered[filtered['Predicted_Risk_Score'] >= risk_threshold]
 
-# Initialize localized Colombo Map close-up (Zoom level set to 14)
-m = folium.Map(location=[6.9000, 79.8600], zoom_start=14, tiles='CartoDB positron')
+# Base map initialization centered over Western Province
+m = folium.Map(location=[6.9000, 80.0000], zoom_start=9, tiles='CartoDB positron')
 
 # Marker classification layout logic
 def get_marker_color(score):
@@ -56,7 +58,7 @@ def get_marker_color(score):
     elif score >= 50: return 'orange'
     else: return 'green'
 
-# Inject markers into map canvas if data matrix contains matching items
+# Inject markers into map canvas
 if not filtered.empty:
     for _, row in filtered.iterrows():
         popup_template = f"""
@@ -79,37 +81,55 @@ if not filtered.empty:
             </table>
         </div>
         """
-        
         folium.Marker(
             location=[row['latitude'], row['longitude']],
             popup=folium.Popup(popup_template, max_width=260),
             icon=folium.Icon(color=get_marker_color(row['Predicted_Risk_Score']), icon='info-sign')
         ).add_to(m)
 
-risk_dict = dict(zip(filtered['MOH_Division'], filtered['Predicted_Risk_Score']))
+# ==============================================================================
+# 🌟 DYNAMIC FLEXBOX METRIC MESH INTERFACE COMPONENT
+# ==============================================================================
 
-# Display localized street overview metrics interface
-st.subheader('Risk Scores by Localized Streets')
+# CSS removed; native Streamlit components are used
+
 if not filtered.empty:
-    cols = st.columns(min(len(risk_dict), 3))
-    for i, (district, score) in enumerate(risk_dict.items()):
-        col_index = i % 3
-        # Convert district name to string to avoid list issues
-        display_label = str(district)
-        cols[col_index].metric(label=display_label, value=f"{score}%")
+    # Create rows of three columns
+    for i, (_, row) in enumerate(filtered.iterrows()):
+        if i % 3 == 0:
+            cols = st.columns(3)
+        col = cols[i % 3]
+        with col:
+            with st.container():
+                st.subheader(row['MOH_Division'])
+                score = row['Predicted_Risk_Score']
+                if score >= 80:
+                    label = "🚨 CRITICAL"
+                elif score >= 50:
+                    label = "⚠️ ELEVATED"
+                else:
+                    label = "✅ CONTROLLED"
+                st.metric(label=label, value=f"{score}%")
+                units = int(row['Recommended_Sterile_Release'])
+                garbage = int(row['Garbage_Spots'])
+                st.caption(f"📦 Sterile Release Plan: {units:,} units | 🗑️ {garbage} Waste Hotspots")
 else:
-    st.info("No active areas match the current date or threshold filters.")
+    st.info("No active surveillance networks match the current filtering criteria.")
 
-# Show underlying database layout grid
+# Show raw table layout matrix
 st.subheader('Filtered Predictions Data Matrix')
 st.dataframe(filtered)
 
-# Deploy interactive workspace rendering canvas using a clean key to avoid caching bugs
-st_folium(m, width=1200, height=600, key="western_province_mesh_v8")
-
+# Deploy interactive workspace rendering canvas using a fresh compilation key
+st_folium(m, width=1200, height=600, key="western_province_mesh_v12_production_final")
 
 st.write('---')
 st.caption('Data source: dengue case reports and 14‑day localized predictive analysis engine.')
+
+
+
+
+
 
 
 
