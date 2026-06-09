@@ -1,70 +1,64 @@
 # LankaShield
 
-![LankaShield Logo](https://raw.githubusercontent.com/your-repo/LankaShield/main/lankashield_logo.png)
-
-## 🎯 Project Overview
-LankaShield is an interactive **Streamlit** dashboard that visualises dengue hotspot predictions across Colombo, Sri Lanka. It combines real‑time risk scores, breeding hotspot locations, and sterile‑male release plans on a **Folium** map with rich, dynamic pop‑ups.
-
-> **New Feature:** The map now uses a custom `folium.Marker` loop with a styled HTML popup (see `dashboard/app.py`). The popup displays:
-> - Division name
-> - Dengue Threat Index (color‑coded by risk)
-> - Number of breeding hotspots
-> - Recommended sterile release units
+LankaShield is an interactive **Streamlit** dashboard that visualises dengue hotspot predictions across the Western Province, Sri Lanka. It combines real‑time risk scores, breeding hotspot locations, and sterile‑male release plans on a **Folium** map with rich, dynamic pop‑ups.
 
 ## ✨ Key Features
-- **Dynamic risk scoring** with a risk‑threshold slider.
-- **Date filter** to view predictions for a specific day.
-- **Responsive Folium map** with coloured markers (`red` ≥ 80, `orange` ≥ 50, `green` < 50).
-- **Rich HTML popups** – modern UI with custom fonts, colours, and layout.
-- **Metrics summary** displayed in a three‑column layout.
-- **Data table** for detailed view of filtered predictions.
+- **Automated Daily Pipeline (`predict.py`):** A background module that automatically simulates climate variance and appends fresh predictive indices to the local ledger every day.
+- **Live Daily Pipeline & Filtration (`app.py`):** Real-time data parsing decoupled from static dates. Strategic planners can filter historical ranges via the sidebar to extract exact metrics for the selected day.
+- **Dynamic Risk Scoring:** Integrated risk‑threshold slider to dynamically isolate high-threat zones.
+- **Responsive Folium Map:** Coloured markers mapping threat indices (`red` ≥ 80, `orange` ≥ 50, `green` < 50) over a clean canvas layer.
+- **Rich HTML Popups:** Modern UI popups displaying division metrics, custom fonts, and real-time biometric threat colors.
+- **Metrics Summary Mesh:** Displays real-time biometric classifications utilizing a clear three‑column structural layout.
 
-## 📦 Installation
+## 🏗️ Project Architecture & File Structure
+
+```text
+LankaShield/
+│
+├── dashboard/
+│   ├── app.py                # Updated Live Streamlit Web Dashboard Application
+│   ├── predict.py            # Automated Daily Predictive Simulation Pipeline
+│   └── data/
+│       └── predictions_mock.csv # Secure data ledger holding daily simulated records
+│
+├── README.md                 # Updated Project Documentation
+└── requirements.txt          # Required Python dependencies
+```
+
+## 📦 Installation & Setup
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/LankaShield.git
+git clone https://github.com
 cd LankaShield
 
-# Create a virtual environment (optional but recommended)
-python -m venv venv
-source venv/bin/activate   # on Windows: venv\Scripts\activate
-
 # Install required packages
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
-> The `requirements.txt` includes:
-> - `streamlit`
-> - `streamlit-folium`
-> - `folium`
-> - `pandas`
-> - `python-dotenv`
+> The `requirements.txt` includes: `streamlit`, `streamlit-folium`, `folium`, `pandas`, `numpy`, `xgboost`, `scikit-learn`.
 
 ## 🚀 Running the Dashboard
+
+### 1. Execute the Automated Prediction Pipeline
+Before booting the interface dashboard, run the automation module to append the current date records to your secure ledger array:
 ```bash
-streamlit run dashboard/app.py
+cd dashboard
+python predict.py
+```
+
+### 2. Run the Streamlit Live Dashboard
+Launch the interface locally via your standard loopback module:
+```bash
+python -m streamlit run app.py
 ```
 Open the displayed URL (usually <http://localhost:8501>) in your browser.
 
-## 🛠️ Configuration
-Create a `.env` file in the project root to override default data paths:
-```dotenv
-PREDICTIONS_PATH=data/predictions.csv
-GEOMETRY_PATH=data/districts.geojson
-```
-If omitted, the defaults defined in `app.py` are used.
-
-## 📊 Data Sources
-- **Predictions CSV** – synthetic data with columns: `date`, `MOH_Division`, `latitude`, `longitude`, `Predicted_Risk_Score`, `Recommended_Sterile_Release`, `Garbage_Spots`.
-- **GeoJSON** – optional district boundaries (not currently rendered).
-
-## 🎨 Styling Notes
-The new popup HTML uses:
-- **Segoe UI** font family for a clean, modern look.
-- **Dynamic colour coding** for risk levels (`#ef4444`, `#f97316`, `#22c55e`).
-- **Responsive layout** fitting within a 230 px width.
+## 📊 Data Analytics Pipeline
+- **Predictions CSV (`predictions_mock.csv`)** – Secure data ledger containing multi-platform metrics: `date`, `MOH_Division`, `latitude`, `longitude`, `Predicted_Risk_Score`, `Recommended_Sterile_Release`, `Garbage_Spots`.
+- **Feature Engineering:** Employs historical weather variance metrics shifted by a 14-day delay pattern to accurately track the *Aedes* mosquito lifecycle.
 
 ## 📖 License
 This project is licensed under the **MIT License**.
 
 ---
 *Happy mapping and stay safe from dengue!*
+
