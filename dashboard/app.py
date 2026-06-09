@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import streamlit as st
+from pathlib import Path
+
 try:
     from streamlit_folium import st_folium
 except ImportError:
@@ -12,7 +14,6 @@ try:
 except ImportError:
     st.error('folium not installed. Please install dependencies.')
     st.stop()
-from pathlib import Path
 
 # Project root directory configuration
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ st.title('🦟 LankaShield – Dengue Hotspot Prediction')
 # Sidebar Controls Configuration
 st.sidebar.header('Filters')
 risk_threshold = st.sidebar.slider('Risk Score Threshold', min_value=0, max_value=100, value=50, step=5)
-selected_date = st.sidebar.date_input('Prediction Date', value=pd.to_datetime('2026-06-08'))
+selected_date = st.sidebar.date_input('Prediction Date', value=pd.to_datetime('2026-06-09'))
 
 # Data Loader Engine
 @st.cache_data
@@ -45,9 +46,13 @@ def load_predictions(file_path):
 # Execution of data pipeline loader
 pred_df = load_predictions(PREDICTIONS_PATH)
 
-# Apply selected filters dynamically
+# ==============================================================================
+# 🌟 LIVE DAILY PIPELINE: நேரடித் தரவுகளை காட்டும் புதிய பகுதி
+# ==============================================================================
+# பயனர் காலெண்டரில் தேர்ந்தெடுக்கும் தேதிக்கான உண்மையான எண்களை மட்டும் வடிகட்டும்
 filtered = pred_df[pred_df['date'] == pd.to_datetime(selected_date)]
 filtered = filtered[filtered['Predicted_Risk_Score'] >= risk_threshold]
+# ==============================================================================
 
 # Base map initialization centered over Western Province
 m = folium.Map(location=[6.9000, 80.0000], zoom_start=9, tiles='CartoDB positron')
@@ -88,14 +93,12 @@ if not filtered.empty:
         ).add_to(m)
 
 # ==============================================================================
-# 🌟 DYNAMIC FLEXBOX METRIC MESH INTERFACE COMPONENT
+# 📊 DYNAMIC FLEXBOX METRIC MESH INTERFACE COMPONENT
 # ==============================================================================
-
 st.subheader('📊 Localized Surveillance Command Center')
 st.caption('Real-time biometric threat classifications across monitored Western Province zones:')
 
 if not filtered.empty:
-    # Create rows of three columns
     for i, (_, row) in enumerate(filtered.iterrows()):
         if i % 3 == 0:
             cols = st.columns(3)
@@ -121,11 +124,13 @@ else:
 st.subheader('Filtered Predictions Data Matrix')
 st.dataframe(filtered)
 
-# Deploy interactive workspace rendering canvas using a fresh compilation key
+# Deploy interactive workspace rendering canvas
 st_folium(m, width=1200, height=600, key="western_province_mesh_v12_production_final")
 
 st.write('---')
 st.caption('Data source: dengue case reports and 14‑day localized predictive analysis engine.')
+
+
 
 
 
