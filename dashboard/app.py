@@ -91,7 +91,8 @@ if not filtered.empty:
 # 🌟 DYNAMIC FLEXBOX METRIC MESH INTERFACE COMPONENT
 # ==============================================================================
 
-# CSS removed; native Streamlit components are used
+st.subheader('📊 Localized Surveillance Command Center')
+st.caption('Real-time biometric threat classifications across monitored Western Province zones:')
 
 if not filtered.empty:
     # Create rows of three columns
